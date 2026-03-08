@@ -1,0 +1,25 @@
+bazel_dep(name = "rules_img", version = "0.3.4")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_python", version = "1.9.0")
+bazel_dep(name = "rules_license", version = "1.0.0")
+bazel_dep(name = "external_deps")
+local_path_override(
+    module_name = "external_deps",
+    path = "external_deps/",
+)
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+pull = use_repo_rule("@rules_img//img:pull.bzl", "pull")
+
+pull(
+    name = "ubuntu",
+    digest = "sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02",
+    registry = "index.docker.io",
+    repository = "library/ubuntu",
+    tag = "24.04",
+)
